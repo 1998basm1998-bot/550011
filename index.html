@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تطبيق المشتركين</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="toast-container" class="toast-container"></div>
+
+    <div id="app">
+        <div id="view-subscribers" class="view active">
+            <div class="header">
+                <h2>المشتركين</h2>
+                <button class="btn btn-primary" onclick="openSubscriberModal()">
+                    <i class="fas fa-plus"></i> إضافة مشترك جديد
+                </button>
+            </div>
+            <div class="content" id="subscribers-list">
+                </div>
+        </div>
+
+        <div id="view-details" class="view">
+            <div class="header">
+                <button class="btn-icon" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
+                <h2 id="detail-title">اسم المشترك</h2>
+                <div style="width: 24px;"></div> </div>
+            
+            <div class="finance-summary">
+                <div class="finance-card debtor">
+                    <span>المدين (عليه)</span>
+                    <h3 id="total-debt">0</h3>
+                </div>
+                <div class="finance-card creditor">
+                    <span>الدائن (الواصل)</span>
+                    <h3 id="total-credit">0</h3>
+                </div>
+            </div>
+            
+            <div class="content">
+                <button class="btn btn-primary w-100 mb-3" onclick="openTransactionModal()">
+                    <i class="fas fa-plus"></i> إضافة معاملة
+                </button>
+                <div id="transactions-list">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="switchTab('subscribers', this)">
+            <i class="fas fa-users"></i>
+            <span>المشتركين</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showToast('قسم التقارير قيد التطوير', 'info')">
+            <i class="fas fa-chart-pie"></i>
+            <span>التقارير</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showToast('قسم الإعدادات قيد التطوير', 'info')">
+            <i class="fas fa-cog"></i>
+            <span>الإعدادات</span>
+        </a>
+    </nav>
+
+    <div id="modal-subscriber" class="modal">
+        <div class="modal-content">
+            <h3 id="sub-modal-title" class="mb-3">إضافة مشترك</h3>
+            <input type="hidden" id="sub-id">
+            <div class="form-group">
+                <label>اسم المشترك</label>
+                <input type="text" id="sub-name" class="form-control" placeholder="أدخل الاسم">
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف (بدون صفر البداية)</label>
+                <div class="phone-input">
+                    <span class="country-code">+964</span>
+                    <input type="tel" id="sub-phone" class="form-control" placeholder="77xxxxxxxx" maxlength="10">
+                </div>
+                <small class="hint">يجب أن يبدأ بـ 77 أو 78 أو 75 (كورك) ويكون 10 أرقام</small>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-primary flex-1" onclick="saveSubscriber()">حفظ</button>
+                <button class="btn btn-danger flex-1" onclick="closeModal('modal-subscriber')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-transaction" class="modal">
+        <div class="modal-content">
+            <h3 class="mb-3">إضافة معاملة</h3>
+            <div class="grid-2">
+                <div class="form-group full-width">
+                    <label>التاريخ</label>
+                    <input type="date" id="trans-date" class="form-control">
+                </div>
+                <div class="form-group full-width">
+                    <label>اسم السائق</label>
+                    <input type="text" id="trans-driver" class="form-control" placeholder="أدخل اسم السائق">
+                </div>
+                <div class="form-group">
+                    <label>رقم السيارة</label>
+                    <input type="text" id="trans-car" class="form-control" placeholder="رقم السيارة">
+                </div>
+                <div class="form-group">
+                    <label>النوعية</label>
+                    <input type="text" id="trans-type" class="form-control" value="حصو">
+                </div>
+                <div class="form-group">
+                    <label>الكمية</label>
+                    <input type="number" id="trans-qty" class="form-control" oninput="calculateTotal()" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>السعر</label>
+                    <input type="number" id="trans-price" class="form-control" oninput="calculateTotal()" placeholder="0">
+                </div>
+                <div class="form-group full-width">
+                    <label>الإجمالي (تلقائي)</label>
+                    <input type="number" id="trans-total" class="form-control readonly" readonly>
+                </div>
+                <div class="form-group full-width">
+                    <label>المبالغ الواصلة</label>
+                    <input type="number" id="trans-paid" class="form-control" placeholder="0">
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-success flex-1" onclick="saveTransaction()">حفظ المعاملة</button>
+                <button class="btn btn-danger flex-1" onclick="closeModal('modal-transaction')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
